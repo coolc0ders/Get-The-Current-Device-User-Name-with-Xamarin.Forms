@@ -13,5 +13,14 @@ namespace DeviceUserName
 		{
 			InitializeComponent();
 		}
-	}
+
+        protected async override void OnAppearing()
+        {
+            await DependencyService.Get<IUserInformation>().GetUserName().ContinueWith(t =>
+            {
+                Device.BeginInvokeOnMainThread(() => UserNameLabel.Text = t.Result);
+            });
+            base.OnAppearing();
+        }
+    }
 }
